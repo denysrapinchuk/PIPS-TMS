@@ -5,45 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PIPS TMS</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #f4f6f9; font-family: sans-serif; }
-        iframe { border: none; width: 100%; height: 100%; display: block; }
-        #error-msg { display: none; text-align: center; margin-top: 50px; color: #666; }
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            width: 100%;
+            overflow: hidden; 
+            background-color: #ffffff;
+        }
+        iframe { 
+            border: none; 
+            width: 100%; 
+            height: 100%; 
+            display: block;
+        }
     </style>
-</head>
-<body>
-    <!-- Обманка для тех, кто зашел без ключа -->
-    <div id="error-msg">
-        <h2>404 Not Found</h2>
-        <p>The requested URL was not found on this server.</p>
-    </div>
-
     <script>
-        // ==========================================
-        // НАСТРОЙКИ (ИЗМЕНИ ЭТИ ДВЕ СТРОКИ)
-        // ==========================================
-        
-        // 1. Твой секретный ключ (можешь придумать любой)
-        const SECRET_KEY = "pips2026"; 
-        
-        // 2. Твоя рабочая ссылка из Google Apps Script (которая заканчивается на /exec)
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbx_XeELeohImHLC5iAWOSX0pk7u6hefrlyVpRmetXypmB4t14Xa0bYXqiFRmvWt7t3b-g/exec"; 
-
-        // ==========================================
-
-        // Читаем параметры из адресной строки
+        // 1. Читаем ссылку и ищем параметр ?key=
         const urlParams = new URLSearchParams(window.location.search);
-        const key = urlParams.get('key');
+        const secretKey = urlParams.get('key');
 
-        // Проверяем ключ
-        if (key === SECRET_KEY) {
-            // Если ключ верный, создаем окно и загружаем базу
-            let iframe = document.createElement('iframe');
-            iframe.src = GAS_URL;
-            document.body.appendChild(iframe);
-        } else {
-            // Если ключа нет или он неверный, показываем ошибку 404
-            document.getElementById('error-msg').style.display = 'block';
+        // 2. Если ключа нет или он не совпадает с pips2026 — блокируем страницу
+        if (secretKey !== 'pips2026') {
+            window.stop(); 
+            document.documentElement.innerHTML = '<h2 style="text-align:center; margin-top:50px; font-family:sans-serif; color:#d32f2f;">403 Forbidden / Доступ закрыт</h2>';
         }
     </script>
+</head>
+<body>
+    <!-- ВСТАВЬ СЮДА СВОЮ НОВУЮ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT (которая заканчивается на /exec) -->
+    <iframe src="https://script.google.com/macros/s/AKfycbx_XeELeohImHLC5iAWOSX0pk7u6hefrlyVpRmetXypmB4t14Xa0bYXqiFRmvWt7t3b-g/exec"></iframe>
 </body>
 </html>
