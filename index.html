@@ -5,41 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PIPS TMS</title>
     <style>
-        body, html { 
-            margin: 0; 
-            padding: 0; 
-            height: 100%; 
-            width: 100%;
-            overflow: hidden; 
-            background-color: #ffffff;
-        }
-        iframe { 
-            border: none; 
-            width: 100%; 
-            height: 100%; 
-            display: block;
-        }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #ffffff; }
+        iframe { border: none; width: 100%; height: 100%; display: block; }
     </style>
     <script>
-        // 1. Читаем ссылку и ищем параметр ?key=
         const urlParams = new URLSearchParams(window.location.search);
         const secretKey = urlParams.get('key');
-
-        // 2. Если ключа нет или он не совпадает — блокируем страницу
         if (secretKey !== 'pips2026') {
             window.stop(); 
             document.documentElement.innerHTML = '<h2 style="text-align:center; margin-top:50px; font-family:sans-serif; color:#d32f2f;">403 Forbidden / Доступ закрыт</h2>';
         }
     </script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <iframe id="app-frame" allowfullscreen></iframe>
     <script>
-        // 3. Если проверка пройдена, динамически собираем ссылку!
+        // Разворачиваем Telegram WebApp на весь экран
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.expand();
+        }
+
         var scriptUrl = "https://script.google.com/macros/s/AKfycbx_XeELeohImHLC5iAWOSX0pk7u6hefrlyVpRmetXypmB4t14Xa0bYXqiFRmvWt7t3b-g/exec";
+        var finalUrl = scriptUrl + window.location.search; // добавляем ?key=pips2026
         
-        // Магия: приклеиваем параметры (?key=...) и скрытые данные Telegram (#tgWebAppData=...)
-        document.getElementById('app-frame').src = scriptUrl + window.location.search + window.location.hash;
+        // ВЫТАСКИВАЕМ ID ПРЯМО НА GITHUB (Пока Google его не стер)
+        var hash = window.location.hash;
+        var tgId = null;
+        var match = hash.match(/%22id%22%3A(\d+)/) || hash.match(/"id":(\d+)/);
+        if (match) {
+            tgId = match[1];
+        } else if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+            tgId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        }
+
+        // ПЕРЕДАЕМ ID В GOOGLE SCRIPT КАК НАДЕЖНЫЙ ПАРАМЕТР
+        if (tgId) {
+            finalUrl += "&tgId=" + tgId;
+        }
+
+        document.getElementById('app-frame').src = finalUrl;
     </script>
 </body>
 </html>
