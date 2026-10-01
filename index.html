@@ -25,7 +25,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const secretKey = urlParams.get('key');
 
-        // 2. Если ключа нет или он не совпадает с pips2026 — блокируем страницу
+        // 2. Если ключа нет или он не совпадает — блокируем страницу
         if (secretKey !== 'pips2026') {
             window.stop(); 
             document.documentElement.innerHTML = '<h2 style="text-align:center; margin-top:50px; font-family:sans-serif; color:#d32f2f;">403 Forbidden / Доступ закрыт</h2>';
@@ -33,7 +33,13 @@
     </script>
 </head>
 <body>
-    <!-- ВСТАВЬ СЮДА СВОЮ НОВУЮ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT (которая заканчивается на /exec) -->
-    <iframe src="https://script.google.com/macros/s/AKfycbx_XeELeohImHLC5iAWOSX0pk7u6hefrlyVpRmetXypmB4t14Xa0bYXqiFRmvWt7t3b-g/exec"></iframe>
+    <iframe id="app-frame" allowfullscreen></iframe>
+    <script>
+        // 3. Если проверка пройдена, динамически собираем ссылку!
+        var scriptUrl = "https://script.google.com/macros/s/AKfycbx_XeELeohImHLC5iAWOSX0pk7u6hefrlyVpRmetXypmB4t14Xa0bYXqiFRmvWt7t3b-g/exec";
+        
+        // Магия: приклеиваем параметры (?key=...) и скрытые данные Telegram (#tgWebAppData=...)
+        document.getElementById('app-frame').src = scriptUrl + window.location.search + window.location.hash;
+    </script>
 </body>
 </html>
