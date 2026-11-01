@@ -329,6 +329,7 @@
         let k = el.getAttribute('data-t');
         if (dict[lang][k]) el.innerHTML = dict[lang][k];
       });
+      goToSlide(curSlide);
     }
 
     renderDots();
