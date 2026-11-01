@@ -300,12 +300,25 @@
       curSlide = idx;
       renderDots();
       document.getElementById('btnPrev').style.opacity = curSlide === 0 ? '0.4' : '1';
+      const nextBtn = document.getElementById('btnNext');
+      if (curSlide === totalSlides - 1) {
+        nextBtn.innerHTML = lang === 'de' ? '🤖 PIPS • BOT öffnen' : (lang === 'en' ? '🤖 Open PIPS • BOT' : '🤖 Открыть PIPS • BOT');
+        nextBtn.style.background = '#22c55e';
+        nextBtn.style.color = '#ffffff';
+      } else {
+        nextBtn.innerHTML = dict[lang].btn_next;
+        nextBtn.style.background = '#d97706';
+        nextBtn.style.color = '#161f2c';
+      }
     }
 
     function moveSlide(dir) {
+      if (dir === 1 && curSlide === totalSlides - 1) {
+        window.location.href = 'https://t.me/pips_logistics_bot';
+        return;
+      }
       let next = curSlide + dir;
       if (next < 0) next = 0;
-      if (next >= totalSlides) next = 0;
       goToSlide(next);
     }
 
