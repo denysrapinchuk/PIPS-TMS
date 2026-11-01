@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PIPS Logistics — Инструкция водителя</title>
+  <style>
+    :root {
+      --bg-dark: #161f2c;
+      --bg-card: #202c26;
+      --bg-olive: #264027;
+      --bg-olive-deep: #14532d;
+      --gold: #d97706;
+      --gold-light: #fbbf24;
+      --burgundy: #6b1d2f;
+      --cream: #f5f5f4;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0;
+      background: var(--bg-dark); color: var(--cream);
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+    .top-bar {
+      background: var(--bg-olive);
+      border-bottom: 2px solid var(--gold);
+      padding: 12px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 16px; letter-spacing: 0.8px; }
+    .brand span { color: var(--gold-light); font-size: 10px; display: block; letter-spacing: 2px; }
+    .lang-switch { display: flex; gap: 6px; }
+    .lang-btn {
+      background: rgba(245,245,244,0.1); color: var(--cream);
+      border: 1px solid rgba(245,245,244,0.2); border-radius: 6px;
+      padding: 5px 10px; font-weight: bold; font-size: 12px; cursor: pointer;
+    }
+    .lang-btn.active { background: var(--gold); color: #161f2c; border-color: var(--gold-light); }
+
+    .slider-wrap {
+      flex: 1; max-width: 480px; width: 100%; margin: 0 auto;
+      padding: 16px; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .progress-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; }
+    .dot { width: 28px; height: 5px; border-radius: 3px; background: rgba(245,245,244,0.18); transition: 0.2s; cursor: pointer; }
+    .dot.active { background: var(--gold-light); width: 42px; }
+
+    .slide { display: none; flex-direction: column; gap: 14px; animation: fadeIn 0.25s ease; }
+    .slide.active { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .step-badge {
+      display: inline-block; width: max-content;
+      background: rgba(217, 119, 6, 0.2); color: var(--gold-light);
+      border: 1px solid var(--gold); padding: 4px 12px; border-radius: 20px;
+      font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+    }
+    .slide-title { font-size: 20px; font-weight: 800; margin: 0; line-height: 1.25; color: var(--cream); }
+    .slide-desc { font-size: 14px; line-height: 1.5; color: #cbd5e1; margin: 0; }
+
+    /* Наглядный макет экрана смартфона */
+    .phone-mockup {
+      background: #111924; border: 2px solid rgba(217, 119, 6, 0.45);
+      border-radius: 18px; padding: 14px; box-shadow: 0 12px 28px rgba(0,0,0,0.45);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .mock-header {
+      background: var(--bg-olive); padding: 8px 12px; border-radius: 10px;
+      font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 2px solid var(--gold);
+    }
+    .mock-bubble {
+      background: #1e2c3a; padding: 10px 12px; border-radius: 12px 12px 12px 4px;
+      font-size: 12.5px; line-height: 1.45; border-left: 3px solid var(--gold);
+    }
+    .mock-btn {
+      background: var(--bg-olive-deep); color: var(--cream);
+      border: 1px solid var(--gold); border-left: 5px solid var(--gold-light);
+      padding: 12px 14px; border-radius: 10px; font-weight: bold; font-size: 14px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .mock-btn.secondary { background: #1e293b; }
+    .mock-btn.burgundy { background: var(--burgundy); }
+    .mock-bottom-bar {
+      background: #1b2636; border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 8px; border-radius: 10px; display: flex; align-items: center; gap: 8px;
+    }
+    .mock-blue-pill {
+      background: #2563eb; color: #fff; font-weight: bold; font-size: 12px;
+      padding: 6px 12px; border-radius: 16px; white-space: nowrap;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.7);
+    }
+    .tip-box {
+      background: rgba(20, 83, 45, 0.35); border: 1px solid rgba(217, 119, 6, 0.4);
+      padding: 10px 12px; border-radius: 10px; font-size: 13px; line-height: 1.4; color: #fde68a;
+    }
+
+    .nav-bar { display: flex; gap: 12px; margin-top: 18px; }
+    .nav-btn {
+      flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: bold;
+      cursor: pointer; border: none;
+    }
+    .btn-prev { background: #263344; color: var(--cream); }
+    .btn-next { background: var(--gold); color: #161f2c; }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="brand">
+      🤖 <div>PIPS LOGISTICS<span>DRIVER GUIDE</span></div>
+    </div>
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="setLang('ru')">RU</button>
+      <button class="lang-btn" onclick="setLang('de')">DE</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+
+  <div class="slider-wrap">
+    <div>
+      <div class="progress-dots" id="dots"></div>
+
+      <!-- СЛАЙД 1 -->
+      <div class="slide active" id="slide-0">
+        <span class="step-badge" data-t="s1_badge">ШАГ 1 ИЗ 5 • АВТОРИЗАЦИЯ</span>
+        <h2 class="slide-title" data-t="s1_title">Первый вход в Бот и Группу</h2>
+        <p class="slide-desc" data-t="s1_desc">Откройте наш бот в Telegram (у него на аватарке Золотой Робот «PIPS • BOT») и нажмите /start.</p>
+        <div class="phone-mockup">
+          <div class="mock-header"><span>🤖 PIPS Logistics Bot</span><span>PIPS • BOT</span></div>
+          <div class="mock-bubble" data-t="s1_mock1">👋 Добро пожаловать в PIPS Logistics!<br>🆔 Ваш ID: <b>277738259</b><br>Нажмите кнопку ниже для входа:</div>
+          <div class="mock-btn"><span>📱 Отправить контакт / Share Contact</span><span>👆</span></div>
+          <div class="mock-btn secondary"><span>👥 Вступить в группу PIPS Logistics</span><span>👉</span></div>
+        </div>
+        <div class="tip-box" data-t="s1_tip">💡 Если ваш номер в Telegram отличается от рабочего — просто перешлите сообщение со своим ID диспетчеру, и он подключит вас за 10 секунд.</div>
+      </div>
+
+      <!-- СЛАЙД 2 -->
+      <div class="slide" id="slide-1">
+        <span class="step-badge" data-t="s2_badge">ШАГ 2 ИЗ 5 • ЗАПУСК ПРИЛОЖЕНИЯ</span>
+        <h2 class="slide-title" data-t="s2_title">Где находится кнопка входа PIPS TMS</h2>
+        <p class="slide-desc" data-t="s2_desc">После регистрации вам не нужны пароли. Внутри бота всегда есть две кнопки для открытия вашего личного кабинета:</p>
+        <div class="phone-mockup">
+          <div class="mock-header"><span>👤 Кабинет водителя</span><span>🌐 RU | 🌙</span></div>
+          <div class="mock-btn"><span>💻 PIPS TMS (Большая кнопка внизу чата)</span><span>👆</span></div>
+          <div class="mock-bottom-bar">
+            <div class="mock-blue-pill">💻 PIPS TMS</div>
+            <div style="color:#64748b; font-size:12px;">Сообщение...</div>
+          </div>
+        </div>
+        <div class="tip-box" data-t="s2_tip">💡 Система узнает вас автоматически по вашему Telegram и сразу открывает ваш профиль водителя!</div>
+      </div>
+
+      <!-- СЛАЙД 3 -->
+      <div class="slide" id="slide-2">
+        <span class="step-badge" data-t="s3_badge">ШАГ 3 ИЗ 5 • КАЖДАЯ СМЕНА</span>
+        <h2 class="slide-title" data-t="s3_title">🔑 Принять авто или сканер (за 15 секунд)</h2>
+        <p class="slide-desc" data-t="s3_desc">Перед выездом нажмите первую зеленую кнопку «Принять авто / сканер»:</p>
+        <div class="phone-mockup">
+          <div class="mock-btn"><span>🔑 Принять авто / сканер</span><span>1️⃣</span></div>
+          <div class="mock-bubble" data-t="s3_mock1">
+            • <b>Автомобиль:</b> выбирается автоматически (или выберите «📵 Только сканер»)<br>
+            • <b>Номер сканера и Пробег:</b> уже подставлены с прошлого раза — просто проверьте или обновите пробег!<br>
+            • <b>Время принятия:</b> укажите фактическое время (не старше 3 часов).
+          </div>
+        </div>
+        <div class="tip-box" data-t="s3_tip">💡 После нажатия «Отправить» карточка приемки автоматически улетает в ветку 📋 System Info нашей группы!</div>
+      </div>
+
+      <!-- СЛАЙД 4 -->
+      <div class="slide" id="slide-3">
+        <span class="step-badge" data-t="s4_badge">ШАГ 4 ИЗ 5 • РАЗ В МЕСЯЦ</span>
+        <h2 class="slide-title" data-t="s4_title">📋 Ежемесячный отчет по авто</h2>
+        <p class="slide-desc" data-t="s4_desc">Все поля в отчете автоматически заполняются данными прошлого осмотра, чтобы вы не вводили их заново:</p>
+        <div class="phone-mockup">
+          <div class="mock-btn secondary"><span>📋 Ежемесячный отчет</span><span>2️⃣</span></div>
+          <div class="mock-bubble" data-t="s4_mock1">
+            1. Проверьте <b>Пробег (KM-Stand)</b> и остаток <b>Шин (%)</b>.<br>
+            2. Отметьте уровень <b>Масла</b>, наличие <b>Огнетушителя, Аптечки, Жилета и Обуви</b>.<br>
+            3. Укажите актуальную <b>Дату мойки</b> и <b>TÜV</b>.<br>
+            4. Если есть поломка — напишите в поле <b>Заметки</b>.
+          </div>
+        </div>
+        <div class="tip-box" data-t="s4_tip">💡 Если мало масла или износ шин критический — система сама выделит ваш отчет красным сигналом для механика и диспетчера.</div>
+      </div>
+
+      <!-- СЛАЙД 5 -->
+      <div class="slide" id="slide-4">
+        <span class="step-badge" data-t="s5_badge">ШАГ 5 ИЗ 5 • ОТПУСКА, РАСПИСАНИЕ И ЧАТ</span>
+        <h2 class="slide-title" data-t="s5_title">🌴 Отгулы, Подмены и План в 19:00</h2>
+        <p class="slide-desc" data-t="s5_desc">Все вопросы по графику теперь решаются в 2 клика:</p>
+        <div class="phone-mockup">
+          <div class="mock-btn burgundy"><span>🌴 Отпуск / Отгул / Подмена</span><span>3️⃣</span></div>
+          <div class="mock-bubble" data-t="s5_mock1">
+            • <b>Заявка на отпуск/подмену:</b> укажите даты и (если договорились) кто вас подменит. Диспетчер одобрит заявку прямо в Telegram!<br><br>
+            • <b>Каждый вечер в 19:00:</b> бот присылает вам личное расписание на завтра со ссылками на PDF-карты маршрутов.<br><br>
+            • <b>В группе PIPS Logistics:</b> в ветке <b>📋 System Info</b> можно откликнуться кнопкой <b>«🙋‍♂️ Я готов поехать!»</b> на свободный экстра-тур или подмену!
+          </div>
+        </div>
+        <div class="tip-box" data-t="s5_tip">🔍 Кнопка «Лупа» вверху экрана позволяет за 1 секунду найти PDF-карту любого маршрута или ПИН-код топливной карты автомобиля!</div>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="nav-btn btn-prev" id="btnPrev" onclick="moveSlide(-1)" data-t="btn_prev">◀ Назад</button>
+      <button class="nav-btn btn-next" id="btnNext" onclick="moveSlide(1)" data-t="btn_next">Далее ▶</button>
+    </div>
+  </div>
+
+  <script>
+    let curSlide = 0;
+    const totalSlides = 5;
+    let lang = 'ru';
+
+    const dict = {
+      ru: {
+        s1_badge: "ШАГ 1 ИЗ 5 • АВТОРИЗАЦИЯ", s1_title: "Первый вход в Бот и Группу",
+        s1_desc: "Откройте наш бот в Telegram (на аватарке Золотой Робот «PIPS • BOT») и нажмите /start.",
+        s1_mock1: "👋 Добро пожаловать в PIPS Logistics!<br>🆔 Ваш ID: <b>277738259</b><br>Нажмите кнопку ниже для входа:",
+        s1_tip: "💡 Если ваш номер в Telegram отличается от рабочего — просто перешлите сообщение со своим ID диспетчеру.",
+        s2_badge: "ШАГ 2 ИЗ 5 • ЗАПУСК ПРИЛОЖЕНИЯ", s2_title: "Где находится кнопка входа PIPS TMS",
+        s2_desc: "После регистрации вам не нужны пароли. Внутри бота всегда доступны две кнопки входа:",
+        s2_tip: "💡 Система узнает вас автоматически по вашему Telegram и сразу открывает ваш профиль водителя!",
+        s3_badge: "ШАГ 3 ИЗ 5 • КАЖДАЯ СМЕНА", s3_title: "🔑 Принять авто или сканер (за 15 сек)",
+        s3_desc: "Перед выездом нажмите первую зеленую кнопку «Принять авто / сканер»:",
+        s3_mock1: "• <b>Автомобиль:</b> выбирается сам (или выберите «📵 Только сканер»)<br>• <b>Сканер и Пробег:</b> уже подставлены — просто обновите пробег!<br>• <b>Время:</b> укажите время приемки (не старше 3 часов).",
+        s3_tip: "💡 После отправки карточка автоматически публикуется в ветке 📋 System Info нашей группы!",
+        s4_badge: "ШАГ 4 ИЗ 5 • РАЗ В МЕСЯЦ", s4_title: "📋 Ежемесячный отчет по авто",
+        s4_desc: "Все поля автоматически заполняются данными прошлого осмотра:",
+        s4_mock1: "1. Обновите <b>Пробег</b> и проверьте остаток <b>Шин (%)</b>.<br>2. Проверьте <b>Масло, Огнетушитель, Аптечку, Жилет и Обувь</b>.<br>3. Укажите <b>Дату мойки</b> и <b>TÜV</b>.<br>4. Опишите замечания в поле <b>Заметки</b>.",
+        s4_tip: "💡 Если есть неисправность — система сама выделит отчет сигналом тревоги для диспетчера.",
+        s5_badge: "ШАГ 5 ИЗ 5 • ГРАФИК И ОТПУСКА", s5_title: "🌴 Отгулы, Подмены и План в 19:00",
+        s5_desc: "Все рабочие вопросы решаются прямо с телефона:",
+        s5_mock1: "• <b>Отпуск / Подмена:</b> выберите даты и укажите, кто вас подменит.<br><br>• <b>В 19:00 ежедневно:</b> бот присылает ваше расписание на завтра с PDF-картами.<br><br>• <b>Ветка 📋 System Info:</b> нажимайте <b>«🙋‍♂️ Готов поехать!»</b>, чтобы взять дополнительный тур!",
+        s5_tip: "🔍 Кнопка «Лупа» вверху позволяет мгновенно найти PDF любого тура или ПИН топливной карты!",
+        btn_prev: "◀ Назад", btn_next: "Далее ▶"
+      },
+      de: {
+        s1_badge: "SCHRITT 1 VON 5 • ANMELDUNG", s1_title: "Erster Start in Bot & Gruppe",
+        s1_desc: "Öffnen Sie unseren Telegram-Bot (Goldener Roboter „PIPS • BOT“) und tippen Sie auf /start.",
+        s1_mock1: "👋 Willkommen bei PIPS Logistics!<br>🆔 Ihre ID: <b>277738259</b><br>Tippen Sie unten auf Kontakt senden:",
+        s1_tip: "💡 Falls Ihre Nummer abweicht, leiten Sie einfach die Nachricht mit Ihrer ID an den Disponenten weiter.",
+        s2_badge: "SCHRITT 2 VON 5 • APP STARTEN", s2_title: "Wo ist die Schaltfläche PIPS TMS?",
+        s2_desc: "Nach der Registrierung brauchen Sie kein Passwort. Nutzen Sie die feste Schaltfläche unten im Bot:",
+        s2_tip: "💡 Das System erkennt Sie automatisch über Telegram und öffnet direkt Ihr Fahrerprofil!",
+        s3_badge: "SCHRITT 3 VON 5 • JEDE SCHICHT", s3_title: "🔑 Auto / Scanner übernehmen (15 Sek.)",
+        s3_desc: "Tippen Sie vor Fahrtbeginn auf die grüne Taste „Auto / Scanner übernehmen“:",
+        s3_mock1: "• <b>Fahrzeug:</b> automatisch vorausgewählt (oder „📵 Nur Scanner“ wählen)<br>• <b>Scanner & KM-Stand:</b> bereits ausgefüllt — nur aktuellen KM-Stand eingeben!<br>• <b>Zeit:</b> Übernahmezeit prüfen (max. 3 Std. zurück).",
+        s3_tip: "💡 Nach dem Absenden wird die Karte automatisch im Kanal 📋 System Info gepostet!",
+        s4_badge: "SCHRITT 4 VON 5 • MONATLICH", s4_title: "📋 Monatliche Fahrzeug-Inspektion",
+        s4_desc: "Alle Felder sind bereits mit den letzten Daten vorausgefüllt:",
+        s4_mock1: "1. <b>KM-Stand</b> und <b>Reifen (%)</b> prüfen.<br>2. <b>Ölstand, Feuerlöscher, Verbandskasten, Weste & Schuhe</b> bestätigen.<br>3. <b>Waschdatum</b> und <b>TÜV</b> angeben.<br>4. Mängel im Feld <b>Anmerkung</b> notieren.",
+        s4_tip: "💡 Bei Mängeln markiert das System den Bericht automatisch für den Disponenten.",
+        s5_badge: "SCHRITT 5 VON 5 • DIENSTPLAN & URLAUB", s5_title: "🌴 Urlaub, Tausch & Plan um 19:00",
+        s5_desc: "Alles direkt über Ihr Smartphone erledigen:",
+        s5_mock1: "• <b>Urlaub / Tausch:</b> Zeitraum wählen und evtl. Ersatzfahrer angeben.<br><br>• <b>Täglich um 19:00:</b> Der Bot sendet Ihren Tourenplan für morgen inkl. PDF-Plänen.<br><br>• <b>Kanal 📋 System Info:</b> Tippen Sie auf <b>„🙋‍♂️ Bereit!“</b>, um freie Extra-Touren zu übernehmen!",
+        s5_tip: "🔍 Über die Lupe oben finden Sie sofort jeden PDF-Tourenplan sowie Tankkarten-PINs!",
+        btn_prev: "◀ Zurück", btn_next: "Weiter ▶"
+      },
+      en: {
+        s1_badge: "STEP 1 OF 5 • AUTHORIZATION", s1_title: "First Login to Bot & Group",
+        s1_desc: "Open our Telegram Bot (Golden Robot icon 'PIPS • BOT') and tap /start.",
+        s1_mock1: "👋 Welcome to PIPS Logistics!<br>🆔 Your ID: <b>277738259</b><br>Tap Share Contact below to log in:",
+        s1_tip: "💡 If your Telegram phone number differs from your work number, simply forward your ID message to the dispatcher.",
+        s2_badge: "STEP 2 OF 5 • LAUNCHING APP", s2_title: "Where to Find the PIPS TMS Button",
+        s2_desc: "No passwords needed! Use the pinned button at the bottom of the bot chat at any time:",
+        s2_tip: "💡 The app recognizes your Telegram account automatically and opens your Driver Profile!",
+        s3_badge: "STEP 3 OF 5 • EVERY SHIFT", s3_title: "🔑 Accept Car or Scanner (in 15 sec)",
+        s3_desc: "Before departure, tap the green 'Accept Car / Scanner' button:",
+        s3_mock1: "• <b>Car:</b> auto-selected (or choose '📵 Scanner Only')<br>• <b>Scanner & ODO:</b> pre-filled — just update current mileage!<br>• <b>Time:</b> confirm acceptance time (up to 3h ago).",
+        s3_tip: "💡 Once submitted, a confirmation card is posted directly to the 📋 System Info topic!",
+        s4_badge: "STEP 4 OF 5 • ONCE A MONTH", s4_title: "📋 Monthly Vehicle Report",
+        s4_desc: "All fields are pre-filled from your previous inspection:",
+        s4_mock1: "1. Update <b>Mileage (ODO)</b> and <b>Tires (%)</b>.<br>2. Check <b>Oil, Extinguisher, First Aid, Vest & Shoes</b>.<br>3. Enter <b>Wash Date</b> and <b>TÜV</b>.<br>4. Add any issues in <b>Notes</b>.",
+        s4_tip: "💡 Any critical issue is automatically highlighted for the dispatcher.",
+        s5_badge: "STEP 5 OF 5 • SCHEDULE & TIME OFF", s5_title: "🌴 Time Off, Swaps & 19:00 Schedule",
+        s5_desc: "Manage your schedule directly from your phone:",
+        s5_mock1: "• <b>Vacation / Swap:</b> pick dates and note who covers for you.<br><br>• <b>Daily at 19:00:</b> receive tomorrow's tours & PDF route maps in the bot.<br><br>• <b>📋 System Info Topic:</b> tap <b>'🙋‍♂️ I can take it!'</b> to volunteer for available extra tours!",
+        s5_tip: "🔍 Use the Search icon (🔍) at the top to find any route PDF or fuel card PIN in 1 second!",
+        btn_prev: "◀ Back", btn_next: "Next ▶"
+      }
+    };
+
+    function renderDots() {
+      const wrap = document.getElementById('dots');
+      wrap.innerHTML = '';
+      for (let i = 0; i < totalSlides; i++) {
+        let d = document.createElement('div');
+        d.className = 'dot' + (i === curSlide ? ' active' : '');
+        d.onclick = () => goToSlide(i);
+        wrap.appendChild(d);
+      }
+    }
+
+    function goToSlide(idx) {
+      document.querySelectorAll('.slide').forEach((s, i) => s.classList.toggle('active', i === idx));
+      curSlide = idx;
+      renderDots();
+      document.getElementById('btnPrev').style.opacity = curSlide === 0 ? '0.4' : '1';
+    }
+
+    function moveSlide(dir) {
+      let next = curSlide + dir;
+      if (next < 0) next = 0;
+      if (next >= totalSlides) next = 0;
+      goToSlide(next);
+    }
+
+    function setLang(l) {
+      lang = l;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase() === l));
+      document.querySelectorAll('[data-t]').forEach(el => {
+        let k = el.getAttribute('data-t');
+        if (dict[lang][k]) el.innerHTML = dict[lang][k];
+      });
+    }
+
+    renderDots();
+  </script>
+</body>
+</html>
